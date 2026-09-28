@@ -5,13 +5,14 @@ const mocks = vi.hoisted(() => ({
   env: {} as Record<string, string>,
   accounts: vi.fn(),
   token: vi.fn(),
+  user: vi.fn(),
 }));
 vi.mock("cloudflare:workers", () => ({ env: mocks.env }));
 vi.mock("@/lib/auth", () => ({
   getAuth: () => ({ api: { getAccessToken: mocks.token } }),
 }));
 vi.mock("@/server/auth/repositories/AuthRepository", () => ({
-  AuthRepository: { getDgtlAccount: mocks.accounts },
+  AuthRepository: { getDgtlAccount: mocks.accounts, getHostedUser: mocks.user },
 }));
 
 describe("central SEO authorization", () => {
@@ -28,6 +29,7 @@ describe("central SEO authorization", () => {
       DGTL_SSO_ACCESS_CHECK_URL: "https://api.example.com/v1/me",
     });
     mocks.accounts.mockResolvedValue([{ accountId: "central-user" }]);
+    mocks.user.mockResolvedValue({ email: "client@example.com" });
     mocks.token.mockResolvedValue({ accessToken: "current-token" });
     vi.stubGlobal(
       "fetch",
@@ -50,6 +52,11 @@ describe("central SEO authorization", () => {
         accountId: "central-user",
       },
     });
+  });
+  it("rejects a retired account even with an existing session", async () => {
+    mocks.user.mockResolvedValue({ email: "old@retired-identity.invalid" });
+    await expect(requireDgtlSeoAccess("old-user")).rejects.toThrow("FORBIDDEN");
+    expect(mocks.token).not.toHaveBeenCalled();
   });
   it("requires linking in strict mode", async () => {
     mocks.accounts.mockResolvedValue([]);

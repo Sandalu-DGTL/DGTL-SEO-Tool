@@ -55,7 +55,6 @@ declare namespace Cloudflare {
     // HMAC secret for the operator-only GDPR storage-erasure endpoint.
     GDPR_ERASURE_SECRET?: string;
     // Comma-separated platform administrators allowed to view cross-client data.
-    SUPER_ADMIN_EMAILS?: string;
 
     // Cloudflare Turnstile — signup captcha (hosted only). Secret verifies
     // tokens server-side; site key is public and inlined into the client build.

@@ -23,6 +23,9 @@ import { resolveSignInHostedOrganization } from "@/server/auth/default-hosted-or
 import { onInvitationAccepted } from "@/server/auth/invited-member";
 import { AuthRepository } from "@/server/auth/repositories/AuthRepository";
 import { ensureSingleDgtlIdentity } from "@/server/auth/dgtl-identity";
+import { prepareFreshCentralIdentity } from "@/server/auth/fresh-central-identity";
+import { passwordAuthEnabled } from "@/lib/password-auth-policy";
+import { getSocialProviders } from "@/lib/auth-social-providers";
 import { captureDubReferralSignup } from "@/server/referrals/dub";
 import {
   sendHostedPasswordResetEmail,
@@ -56,6 +59,7 @@ function createAuth() {
   const baseAuthConfig = createBaseAuthConfig(
     isHostedAuthMode(env.AUTH_MODE)
       ? {
+          prepareDgtlIdentity: prepareFreshCentralIdentity,
           organization: {
             // No sendInvitationEmail here on purpose: better-auth swallows a
             // throw from that callback, so a failed send would still read as
@@ -168,7 +172,10 @@ function createAuth() {
     ...baseAuthConfig,
     emailAndPassword: {
       ...baseAuthConfig.emailAndPassword,
-      enabled: hostedPasswordAuthEnabled,
+      enabled: passwordAuthEnabled(
+        baseAuthConfig.emailAndPassword.enabled,
+        hostedPasswordAuthEnabled,
+      ),
       requireEmailVerification: hostedPasswordAuthEnabled && !bypassEmail,
       resetPasswordTokenExpiresIn: 60 * 60,
       revokeSessionsOnPasswordReset: true,
@@ -192,7 +199,7 @@ function createAuth() {
               });
             },
           },
-    socialProviders: getSocialProviders(),
+    socialProviders: getSocialProviders(env),
     // Where OAuth redirect-flow failures land when Better Auth can't honor a
     // per-flow errorCallbackURL (Google-side errors like a canceled consent
     // screen, replayed callback URLs, sign-in failures). Without this the
@@ -348,45 +355,6 @@ function getHostedSecret() {
   return secret;
 }
 
-function getSocialProviders() {
-  // Google social login is hosted-only. Self-hosted builds the auth instance
-  // solely for Search Console token ops, which use the genericOAuth provider
-  // (createBaseAuthConfig) with its own creds — so it must NOT require the
-  // social-login config here, otherwise getAuth() construction would be coupled
-  // to GSC creds rather than just BETTER_AUTH_SECRET.
-  if (!isHostedAuthMode(env.AUTH_MODE)) {
-    return {};
-  }
-
-  const google = getGoogleSocialProviderConfig();
-  return google ? { google } : {};
-}
-
-function getGoogleSocialProviderConfig() {
-  const googleClientId = env.GOOGLE_CLIENT_ID?.trim();
-  const googleClientSecret = env.GOOGLE_CLIENT_SECRET?.trim();
-
-  if (!googleClientId && !googleClientSecret) {
-    return null;
-  }
-
-  if (!googleClientId) {
-    throw new Error("GOOGLE_CLIENT_ID is required in hosted mode");
-  }
-
-  if (!googleClientSecret) {
-    throw new Error("GOOGLE_CLIENT_SECRET is required in hosted mode");
-  }
-
-  return {
-    clientId: googleClientId,
-    clientSecret: googleClientSecret,
-    mapProfileToUser: (profile: { name?: string }) => ({
-      name: profile.name,
-    }),
-  };
-}
-
 function hasHostedAuthEmailConfig() {
   const loopsVars = [
     "LOOPS_API_KEY",
@@ -404,7 +372,7 @@ export function hasHostedAuthConfig() {
   try {
     getHostedBaseUrl();
     getHostedSecret();
-    getGoogleSocialProviderConfig();
+    getSocialProviders(env);
     return true;
   } catch {
     return false;

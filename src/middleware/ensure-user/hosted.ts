@@ -27,18 +27,20 @@ export async function resolveHostedContext(
   headers: Headers,
 ): Promise<EnsuredUserContext> {
   const session = await requireHostedSession(headers);
-  await requireDgtlSeoAccess(session.user.id);
   const activeOrganizationId = getActiveOrganizationId(session);
+  // Independent reads may overlap, but neither result authorizes access alone.
+  // Do not cache entitlement or membership across requests.
+  const [, membership] = await Promise.all([
+    requireDgtlSeoAccess(session.user.id),
+    activeOrganizationId
+      ? AuthRepository.getMembership(session.user.id, activeOrganizationId)
+      : Promise.resolve(null),
+  ]);
 
   if (activeOrganizationId) {
     // The session's activeOrganizationId is only a hint (it can outlive a
     // membership: removal, org deletion, cookie cache). The member row is the
     // authorization fact and also carries the caller's role.
-    const membership = await AuthRepository.getMembership(
-      session.user.id,
-      activeOrganizationId,
-    );
-
     if (membership) {
       return {
         userId: session.user.id,

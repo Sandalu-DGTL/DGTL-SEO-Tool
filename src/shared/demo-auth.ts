@@ -1,12 +1,6 @@
 import { z } from "zod";
 
 export const LOCAL_DEMO_ACCOUNTS = {
-  superAdmin: {
-    email: "superadmin@dgtl.local",
-    password: "DemoAdmin123!",
-    session: "dgtl-super-admin-v1",
-    role: "super_admin",
-  },
   client: {
     email: "client@dgtl.local",
     password: "DemoClient123!",
@@ -26,7 +20,7 @@ export const demoSessionSchema = z.discriminatedUnion("authenticated", [
   z.object({
     authenticated: z.literal(true),
     email: z.string(),
-    role: z.enum(["super_admin", "client"]),
+    role: z.literal("client"),
   }),
   z.object({
     authenticated: z.literal(false),

@@ -186,6 +186,37 @@ async function setLastActiveOrganization(
 }
 
 export const AuthRepository = {
+  async hasDgtlSubject(subject: string) {
+    const rows = await db
+      .select({ id: account.id })
+      .from(account)
+      .where(
+        and(eq(account.providerId, "dgtl-sso"), eq(account.accountId, subject)),
+      )
+      .limit(1);
+    return rows.length > 0;
+  },
+  async retireEmailForFreshIdentity(email: string) {
+    const normalized = email.trim().toLowerCase();
+    const old = await db.query.user.findFirst({
+      columns: { id: true },
+      where: eq(sql`lower(${authUser.email})`, normalized),
+    });
+    if (!old) return;
+    // Compare-and-set preserves concurrent changes; no project/account rows move.
+    await db
+      .update(authUser)
+      .set({
+        email: `${old.id}@retired-identity.invalid`,
+        emailVerified: false,
+      })
+      .where(
+        and(
+          eq(authUser.id, old.id),
+          eq(sql`lower(${authUser.email})`, normalized),
+        ),
+      );
+  },
   async getDgtlAccount(userId: string) {
     return db
       .select({ accountId: account.accountId })

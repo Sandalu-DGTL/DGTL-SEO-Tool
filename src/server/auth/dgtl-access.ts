@@ -12,7 +12,13 @@ import { AppError } from "@/server/lib/errors";
 export async function requireDgtlSeoAccess(userId: string): Promise<void> {
   const provider = getDgtlSsoProviderConfig(env);
   if (!provider) return;
-  const accounts = await AuthRepository.getDgtlAccount(userId);
+  const [accounts, user] = await Promise.all([
+    AuthRepository.getDgtlAccount(userId),
+    AuthRepository.getHostedUser(userId),
+  ]);
+  // Enforce retirement against the database, even with a cached session cookie.
+  if (user?.email.endsWith("@retired-identity.invalid"))
+    throw new AppError("FORBIDDEN");
   if (!accounts.length && env.DGTL_SSO_REQUIRED !== "true") return;
   if (!accounts.length) throw new AppError("DGTL_LINK_REQUIRED");
   if (accounts.length !== 1) {

@@ -7,7 +7,7 @@ import { cloudflare } from "@cloudflare/vite-plugin";
 import { devtools } from "@tanstack/devtools-vite";
 import { leanWorkerBundle } from "./vite-plugin-lean-worker-bundle";
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const port = process.env.PORT
     ? Number(process.env.PORT)
@@ -55,7 +55,17 @@ export default defineConfig(({ mode }) => {
       cloudflare({
         inspectorPort: false,
         viteEnvironment: { name: "ssr" },
-        // The site-audit aux worker builds to dist/open_seo_audit/ and runs
+        // Wrangler's production vars intentionally declare AUTH_MODE=hosted.
+        // During `vite dev`, let the local env file override only that binding
+        // so developers can use the documented local_noauth mode. Production
+        // builds and deployments continue to use wrangler.jsonc unchanged.
+        config:
+          command === "serve" && env.AUTH_MODE
+            ? (config) => ({
+                vars: { ...config.vars, AUTH_MODE: env.AUTH_MODE },
+              })
+            : undefined,
+        // The site-audit aux worker builds to dist/ceo_dgtl_audit/ and runs
         // beside the main worker in dev and preview, with the app's
         // cross-script SITE_AUDIT_WORKFLOW / AUDIT_SCRATCHPAD bindings
         // resolved against it.

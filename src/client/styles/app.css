@@ -2,7 +2,8 @@
 
 @theme {
   --container-8xl: 88rem;
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-sans:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 :root {
@@ -62,13 +63,13 @@
   name: "openseo-dark";
   prefersdark: true;
   color-scheme: dark;
-  --color-base-100: #202b25;
-  --color-base-200: #162019;
-  --color-base-300: #45534a;
-  --color-base-content: #f3f1e9;
-  --color-primary: #a3d5b3;
-  --color-primary-content: #15321f;
-  --color-secondary: oklch(60% 0.15 145);
+  --color-base-100: #171717;
+  --color-base-200: #0d0d0d;
+  --color-base-300: #383838;
+  --color-base-content: #f3f3f3;
+  --color-primary: #a9bcff;
+  --color-primary-content: #111827;
+  --color-secondary: #a1a1aa;
   --color-secondary-content: oklch(100% 0 0);
   --color-accent: #e4ce9d;
   --color-accent-content: #302714;
@@ -375,50 +376,136 @@ html[data-theme="openseo-dark"] .alert-error {
 
 /* DGTL Bawa Earth v1 UI adapter; no auth or data behavior is changed.
    Dark surfaces are an SEO-specific extension; theme preference is preserved. */
-body { font-family: var(--font-sans); line-height: 1.55; }
-.dgtl-sidebar { border-inline-end: 1px solid var(--color-base-300); }
-.dgtl-masthead { background: #15321f; color: #fff; border-bottom: 3px solid #c4a35a; }
-.dgtl-brand-mark { display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid #c4a35a; border-radius: 8px; color: #e4ce9d; }
+body {
+  font-family: var(--font-sans);
+  line-height: 1.55;
+}
+.dgtl-sidebar {
+  border-inline-end: 1px solid var(--color-base-300);
+}
+.dgtl-masthead {
+  background: #15321f;
+  color: #fff;
+  border-bottom: 3px solid #c4a35a;
+}
+.dgtl-brand-mark {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid #c4a35a;
+  border-radius: 8px;
+  color: #e4ce9d;
+}
+
+html[data-theme="openseo-dark"] .dgtl-masthead {
+  background: #111111;
+  border-bottom-color: var(--color-base-300);
+}
+
+html[data-theme="openseo-dark"] .dgtl-brand-mark {
+  border-color: #737373;
+  color: var(--color-base-content);
+}
 :is(button, a, input, select, textarea, summary, [tabindex]):focus-visible {
   outline: 2px solid #fff;
   outline-offset: 2px;
   box-shadow: 0 0 0 5px #1a1a2e;
 }
-.input:focus-visible, .textarea:focus-visible {
+.input:focus-visible,
+.textarea:focus-visible {
   outline: 2px solid #fff;
   outline-offset: 2px;
   box-shadow: 0 0 0 5px #1a1a2e;
 }
-.btn { min-height: 44px; }
-.btn-circle, .btn-square { min-width: 44px; }
-.input, .select { min-height: 44px; }
-.tab { min-height: 44px; }
-/* Readable forms and consistent shared workbench surfaces across SEO tools. */
-.card, .modal-box { border-radius: 12px; }
-.modal-box { max-height: calc(100dvh - 32px); }
-.input, .select, .textarea, .btn { border-radius: 8px; }
-.btn-circle { border-radius: 999px; }
-.table { font-size: 14px; }
-.table :is(th, td) { padding-block: 12px; }
-.table thead { color: var(--color-base-content); }
-.dgtl-overview :is(.text-base-content\/40, .text-base-content\/45, .text-base-content\/50, .text-base-content\/55, .text-base-content\/65) {
-  color: color-mix(in srgb, var(--color-base-content) 78%, var(--color-base-100));
+.btn {
+  min-height: 44px;
 }
-.dgtl-overview .text-xs { font-size: 13px; }
-html[data-theme="openseo-dark"] :is(.input, .select, .textarea) { border-color: #a2aca4; }
-html[data-theme="openseo-dark"] :is(button, a, input, select, textarea, summary, [tabindex]):focus-visible {
+.btn-circle,
+.btn-square {
+  min-width: 44px;
+}
+.input,
+.select {
+  min-height: 44px;
+}
+.tab {
+  min-height: 44px;
+}
+/* Readable forms and consistent shared workbench surfaces across SEO tools. */
+.card,
+.modal-box {
+  border-radius: 12px;
+}
+.modal-box {
+  max-height: calc(100dvh - 32px);
+}
+.input,
+.select,
+.textarea,
+.btn {
+  border-radius: 8px;
+}
+.btn-circle {
+  border-radius: 999px;
+}
+.table {
+  font-size: 14px;
+}
+.table :is(th, td) {
+  padding-block: 12px;
+}
+.table thead {
+  color: var(--color-base-content);
+}
+html[data-theme="openseo-dark"] :is(.input, .select, .textarea) {
+  border-color: #a2aca4;
+}
+html[data-theme="openseo-dark"]
+  :is(button, a, input, select, textarea, summary, [tabindex]):focus-visible {
   outline-color: #15321f;
   box-shadow: 0 0 0 5px #e4ce9d;
 }
-html[data-theme="openseo"] :is(.input, .select, .textarea) { border-color: #807a6f; }
-html[data-theme="openseo"] .btn:not(.btn-primary, .btn-error, .btn-neutral, .btn-ghost, .btn-soft) { --btn-border: #807a6f; }
-html[data-theme="openseo"] .alert-warning { color: #7a5a16; background: #faeeda; border-color: #7a5a16; }
-html[data-theme="openseo"] .alert-info { color: #0c447c; background: #e6f1fb; border-color: #0c447c; }
-html[data-theme="openseo"] .alert-success { color: #214f3b; background: #eaf3de; border-color: #214f3b; }
-html[data-theme="openseo"] .alert-error { color: #8a2d2d; background: #f7e7e5; border-color: #8a2d2d; }
+html[data-theme="openseo"] :is(.input, .select, .textarea) {
+  border-color: #807a6f;
+}
+html[data-theme="openseo"]
+  .btn:not(.btn-primary, .btn-error, .btn-neutral, .btn-ghost, .btn-soft) {
+  --btn-border: #807a6f;
+}
+html[data-theme="openseo"] .alert-warning {
+  color: #7a5a16;
+  background: #faeeda;
+  border-color: #7a5a16;
+}
+html[data-theme="openseo"] .alert-info {
+  color: #0c447c;
+  background: #e6f1fb;
+  border-color: #0c447c;
+}
+html[data-theme="openseo"] .alert-success {
+  color: #214f3b;
+  background: #eaf3de;
+  border-color: #214f3b;
+}
+html[data-theme="openseo"] .alert-error {
+  color: #8a2d2d;
+  background: #f7e7e5;
+  border-color: #8a2d2d;
+}
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 @media (forced-colors: active) {
-  :is(button, a, input, select, textarea, summary, [tabindex]):focus-visible { outline: 2px solid Highlight; box-shadow: none; }
+  :is(button, a, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid Highlight;
+    box-shadow: none;
+  }
 }

@@ -14,9 +14,16 @@ const INVITATION_EXPIRES_IN_SECONDS = 60 * 60 * 24 * 7;
 const unlinkAccountBodySchema = z.object({ providerId: z.string() });
 
 export function createBaseAuthConfig(options?: {
+  prepareDgtlIdentity?: (identity: {
+    id: string;
+    email: string;
+  }) => Promise<void>;
   organization?: Pick<OrganizationOptions, "organizationHooks">;
 }) {
-  const dgtlSsoProvider = getDgtlSsoProviderConfig(env);
+  const dgtlSsoProvider = getDgtlSsoProviderConfig(
+    env,
+    options?.prepareDgtlIdentity,
+  );
   return {
     ...baseAuthOptions,
     emailAndPassword: {

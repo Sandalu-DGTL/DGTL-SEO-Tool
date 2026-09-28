@@ -11,7 +11,6 @@ import {
   LogOut,
   MessageCircle,
   Settings,
-  ShieldCheck,
   User,
   X,
 } from "lucide-react";
@@ -28,7 +27,6 @@ import { closeDropdown } from "@/client/lib/dropdown";
 import { signOutAndRedirect, useSession } from "@/lib/auth-client";
 import { isHostedClientAuthMode } from "@/lib/auth-mode";
 import { BILLING_ROUTE } from "@/shared/billing";
-import { getSuperAdminAccess } from "@/serverFunctions/superAdmin";
 import {
   isLocalDemoAuthEnabled,
   signOutDemoSession,
@@ -137,7 +135,9 @@ export function Sidebar({ projectId, onNavigate, onClose }: SidebarProps) {
           onClick={onNavigate}
           className="flex min-h-11 items-center gap-3 text-base font-semibold"
         >
-          <span className="dgtl-brand-mark" aria-hidden="true">D</span>
+          <span className="dgtl-brand-mark" aria-hidden="true">
+            D
+          </span>
           DGTL SEO
         </Link>
         {onClose ? (
@@ -252,11 +252,6 @@ function SidebarFooter({ onNavigate }: { onNavigate?: () => void }) {
     ...organizationContextQueryOptions(),
     enabled: isHostedMode && Boolean(email),
   });
-  const superAdminAccess = useQuery({
-    queryKey: ["superAdmin", "access"],
-    queryFn: () => getSuperAdminAccess(),
-    retry: false,
-  });
   const organizations = orgContextQuery.data?.organizations ?? [];
   const activeOrganizationId = orgContextQuery.data?.organizationId;
 
@@ -280,14 +275,6 @@ function SidebarFooter({ onNavigate }: { onNavigate?: () => void }) {
 
   return (
     <div className="shrink-0 border-t border-base-300 px-2 py-2 pb-safe">
-      {superAdminAccess.data?.allowed ? (
-        <SidebarNavLink
-          icon={ShieldCheck}
-          label="Super Admin"
-          onNavigate={onNavigate}
-          linkProps={{ to: "/admin/clients" }}
-        />
-      ) : null}
       <SidebarNavLink
         icon={CircleHelp}
         label="Help & Community"

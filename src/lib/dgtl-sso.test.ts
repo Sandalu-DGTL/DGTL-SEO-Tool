@@ -81,13 +81,18 @@ describe("DGTL SSO provider configuration", () => {
       );
     vi.stubGlobal("fetch", fetchMock);
 
-    const provider = getDgtlSsoProviderConfig(configured);
+    const prepare = vi.fn().mockResolvedValue(undefined);
+    const provider = getDgtlSsoProviderConfig(configured, prepare);
     expect(
       await provider?.getUserInfo({ accessToken: "access-token" }),
     ).toMatchObject({
       id: "central-user-id",
       email: "client@example.com",
       emailVerified: true,
+    });
+    expect(prepare).toHaveBeenCalledWith({
+      id: "central-user-id",
+      email: "client@example.com",
     });
     expect(fetchMock).toHaveBeenCalledWith(
       "https://example.supabase.co/auth/v1/oauth/userinfo",

@@ -26,7 +26,10 @@ type DgtlSsoEnv = {
   DGTL_SSO_ACCESS_CHECK_URL?: string;
 };
 
-export function getDgtlSsoProviderConfig(env: DgtlSsoEnv) {
+export function getDgtlSsoProviderConfig(
+  env: DgtlSsoEnv,
+  prepareIdentity?: (identity: { id: string; email: string }) => Promise<void>,
+) {
   if (
     env.AUTH_MODE === "hosted" &&
     env.DGTL_SSO_REQUIRED === "true" &&
@@ -106,6 +109,7 @@ export function getDgtlSsoProviderConfig(env: DgtlSsoEnv) {
       ) {
         return null;
       }
+      await prepareIdentity?.({ id: sub, email });
       return {
         id: sub,
         email,
@@ -115,8 +119,7 @@ export function getDgtlSsoProviderConfig(env: DgtlSsoEnv) {
       };
     },
     // Only identities with verified central SEO access reach user creation.
-    // Existing verified local emails may match through Better Auth's linking
-    // policy; unverified local accounts still need explicit recovery.
+    // The server preparation hook separates new subjects from old email matches.
     disableSignUp: false,
   };
 }

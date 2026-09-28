@@ -101,40 +101,26 @@ export function DgtlLandingPage() {
               <div className="flex items-center justify-between border-b border-white/10 pb-4">
                 <div>
                   <p className="text-sm text-white/45">Client workspace</p>
-                  <p className="font-medium">Acme Digital / Website overview</p>
+                  <p className="font-medium">Your website overview</p>
                 </div>
                 <span className="rounded-full bg-emerald-400/15 px-2.5 py-1 text-xs text-emerald-300">
-                  Healthy
+                  Get started
                 </span>
               </div>
-              <div className="grid grid-cols-3 gap-3 py-5">
+              <ol className="space-y-4 py-5">
                 {[
-                  ["Organic clicks", "24.8K", "+18%"],
-                  ["SEO health", "91", "+6"],
-                  ["Conversions", "1,284", "+12%"],
-                ].map(([label, value, change]) => (
-                  <div key={label} className="rounded-xl bg-white/[0.045] p-3">
-                    <p className="text-xs text-white/40">{label}</p>
-                    <p className="mt-2 text-2xl font-semibold">{value}</p>
-                    <p className="mt-1 text-xs text-emerald-300">{change}</p>
-                  </div>
+                  "Add your website to a project.",
+                  "Connect your analytics and Search Console properties.",
+                  "Run an audit and review your site's results.",
+                ].map((step, index) => (
+                  <li
+                    key={step}
+                    className="rounded-xl bg-white/[0.045] p-3 text-sm text-white/70"
+                  >
+                    {index + 1}. {step}
+                  </li>
                 ))}
-              </div>
-              <div className="h-40 rounded-xl bg-[linear-gradient(180deg,rgba(52,211,153,.16),transparent),repeating-linear-gradient(0deg,transparent,transparent_31px,rgba(255,255,255,.05)_32px)] p-4">
-                <svg
-                  viewBox="0 0 500 120"
-                  className="h-full w-full"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M0 100 C70 92 75 72 140 77 S220 45 275 58 S350 25 410 35 S465 8 500 16"
-                    fill="none"
-                    stroke="#34d399"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </div>
+              </ol>
             </div>
           </div>
         </section>
@@ -155,8 +141,8 @@ export function DgtlLandingPage() {
             </div>
             <div className="mt-12 flex items-center gap-3 rounded-2xl border border-white/10 p-5 text-sm text-white/55">
               <ShieldCheck className="size-5 shrink-0 text-emerald-300" /> DGTL
-              super administrators manage client workspaces; client users can
-              access only their organization and websites.
+              keeps every client workspace isolated so users can access only
+              their organization and websites.
             </div>
           </div>
         </section>

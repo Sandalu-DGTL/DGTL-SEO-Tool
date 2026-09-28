@@ -194,15 +194,6 @@ function SignInPage() {
           <div className="space-y-3 text-sm text-white/55">
             <p>Local demonstration accounts</p>
             <DemoCredentialButton
-              label="Super admin"
-              email={LOCAL_DEMO_ACCOUNTS.superAdmin.email}
-              password={LOCAL_DEMO_ACCOUNTS.superAdmin.password}
-              onSelect={(email, password) => {
-                form.setFieldValue("email", email);
-                form.setFieldValue("password", password);
-              }}
-            />
-            <DemoCredentialButton
               label="Client"
               email={LOCAL_DEMO_ACCOUNTS.client.email}
               password={LOCAL_DEMO_ACCOUNTS.client.password}

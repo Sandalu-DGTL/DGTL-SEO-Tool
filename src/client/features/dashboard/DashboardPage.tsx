@@ -10,6 +10,7 @@ import {
 import { Ga4Card } from "@/client/features/dashboard/Ga4Card";
 import { WorkspaceMergeBanner } from "@/client/features/dashboard/WorkspaceMergeBanner";
 import { DgtlOverview } from "@/client/features/dashboard/DgtlOverview";
+import { DashboardPreview } from "@/client/features/dashboard/DashboardPreview";
 import { getStandardErrorMessage } from "@/client/lib/error-messages";
 import {
   getDashboardActivation,
@@ -135,7 +136,9 @@ export function DashboardPage({ projectId }: { projectId: string }) {
   return (
     <div className="px-4 py-4 pb-24 md:px-6 md:py-6 md:pb-8">
       <div className="mx-auto flex max-w-7xl flex-col gap-5">
-        <DgtlOverview projectId={projectId} />
+        <DgtlOverview />
+
+        <DashboardPreview projectId={projectId} />
 
         <WorkspaceMergeBanner />
 

@@ -45,7 +45,6 @@ import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AppSettingsOrganizationRouteImport } from './routes/_app/settings/organization'
 import { Route as AppHelpOpenrouterApiKeyRouteImport } from './routes/_app/help/openrouter-api-key'
 import { Route as AppHelpDataforseoApiKeyRouteImport } from './routes/_app/help/dataforseo-api-key'
-import { Route as AppAdminClientsRouteImport } from './routes/_app/admin/clients'
 import { Route as ProjectPProjectIdRouteRouteImport } from './routes/_project/p/$projectId/route'
 import { Route as ProjectPProjectIdIndexRouteImport } from './routes/_project/p/$projectId/index'
 import { Route as ApiGscOauthCallbackRouteImport } from './routes/api/gsc/oauth/callback'
@@ -253,11 +252,6 @@ const AppHelpDataforseoApiKeyRoute = AppHelpDataforseoApiKeyRouteImport.update({
   path: '/help/dataforseo-api-key',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const AppAdminClientsRoute = AppAdminClientsRouteImport.update({
-  id: '/admin/clients',
-  path: '/admin/clients',
-  getParentRoute: () => AppRouteRoute,
-} as any)
 const ProjectPProjectIdRouteRoute = ProjectPProjectIdRouteRouteImport.update({
   id: '/p/$projectId',
   path: '/p/$projectId',
@@ -438,7 +432,6 @@ export interface FileRoutesByFullPath {
   '/mockups/signup': typeof MockupsSignupRoute
   '/r/$reportId': typeof RReportIdRoute
   '/p/$projectId': typeof ProjectPProjectIdRouteRouteWithChildren
-  '/admin/clients': typeof AppAdminClientsRoute
   '/help/dataforseo-api-key': typeof AppHelpDataforseoApiKeyRoute
   '/help/openrouter-api-key': typeof AppHelpOpenrouterApiKeyRoute
   '/settings/organization': typeof AppSettingsOrganizationRoute
@@ -498,7 +491,6 @@ export interface FileRoutesByTo {
   '/api/health': typeof ApiHealthRoute
   '/mockups/signup': typeof MockupsSignupRoute
   '/r/$reportId': typeof RReportIdRoute
-  '/admin/clients': typeof AppAdminClientsRoute
   '/help/dataforseo-api-key': typeof AppHelpDataforseoApiKeyRoute
   '/help/openrouter-api-key': typeof AppHelpOpenrouterApiKeyRoute
   '/settings/organization': typeof AppSettingsOrganizationRoute
@@ -562,7 +554,6 @@ export interface FileRoutesById {
   '/r/$reportId': typeof RReportIdRoute
   '/_app/': typeof AppIndexRoute
   '/_project/p/$projectId': typeof ProjectPProjectIdRouteRouteWithChildren
-  '/_app/admin/clients': typeof AppAdminClientsRoute
   '/_app/help/dataforseo-api-key': typeof AppHelpDataforseoApiKeyRoute
   '/_app/help/openrouter-api-key': typeof AppHelpOpenrouterApiKeyRoute
   '/_app/settings/organization': typeof AppSettingsOrganizationRoute
@@ -626,7 +617,6 @@ export interface FileRouteTypes {
     | '/mockups/signup'
     | '/r/$reportId'
     | '/p/$projectId'
-    | '/admin/clients'
     | '/help/dataforseo-api-key'
     | '/help/openrouter-api-key'
     | '/settings/organization'
@@ -686,7 +676,6 @@ export interface FileRouteTypes {
     | '/api/health'
     | '/mockups/signup'
     | '/r/$reportId'
-    | '/admin/clients'
     | '/help/dataforseo-api-key'
     | '/help/openrouter-api-key'
     | '/settings/organization'
@@ -749,7 +738,6 @@ export interface FileRouteTypes {
     | '/r/$reportId'
     | '/_app/'
     | '/_project/p/$projectId'
-    | '/_app/admin/clients'
     | '/_app/help/dataforseo-api-key'
     | '/_app/help/openrouter-api-key'
     | '/_app/settings/organization'
@@ -1065,13 +1053,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppHelpDataforseoApiKeyRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/_app/admin/clients': {
-      id: '/_app/admin/clients'
-      path: '/admin/clients'
-      fullPath: '/admin/clients'
-      preLoaderRoute: typeof AppAdminClientsRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
     '/_project/p/$projectId': {
       id: '/_project/p/$projectId'
       path: '/p/$projectId'
@@ -1287,7 +1268,6 @@ interface AppRouteRouteChildren {
   AppTeamRoute: typeof AppTeamRoute
   AppUserRoute: typeof AppUserRoute
   AppIndexRoute: typeof AppIndexRoute
-  AppAdminClientsRoute: typeof AppAdminClientsRoute
   AppHelpDataforseoApiKeyRoute: typeof AppHelpDataforseoApiKeyRoute
   AppHelpOpenrouterApiKeyRoute: typeof AppHelpOpenrouterApiKeyRoute
 }
@@ -1301,7 +1281,6 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppTeamRoute: AppTeamRoute,
   AppUserRoute: AppUserRoute,
   AppIndexRoute: AppIndexRoute,
-  AppAdminClientsRoute: AppAdminClientsRoute,
   AppHelpDataforseoApiKeyRoute: AppHelpDataforseoApiKeyRoute,
   AppHelpOpenrouterApiKeyRoute: AppHelpOpenrouterApiKeyRoute,
 }

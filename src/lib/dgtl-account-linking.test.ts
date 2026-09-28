@@ -20,9 +20,15 @@ describe("verified DGTL account matching", () => {
     "blocks manual DGTL identity changes at %s",
     async (path) => {
       const hook = createBaseAuthConfig().hooks.before;
-      await expect(
-        hook({ path, body: { providerId: "dgtl-sso" } } as never),
-      ).rejects.toMatchObject({ status: "FORBIDDEN" });
+      // This guard only reads path and body, before using the auth context.
+      // oxlint-disable-next-line typescript-eslint(no-unsafe-type-assertion)
+      const request = {
+        path,
+        body: { providerId: "dgtl-sso" },
+      } as unknown as Parameters<typeof hook>[0];
+      await expect(hook(request)).rejects.toMatchObject({
+        status: "FORBIDDEN",
+      });
     },
   );
   it("disables password authentication in mandatory central-login mode", () => {

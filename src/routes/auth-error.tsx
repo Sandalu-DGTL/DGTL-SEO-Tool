@@ -2,6 +2,7 @@ import { Link, createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { AuthPageCard, AuthPageShell } from "@/client/features/auth/AuthPage";
 import { googleAuthErrorCopy } from "@/client/features/integrations/googleAuthErrorCopy";
+import { getDgtlAuthErrorCopy } from "@/client/features/auth/dgtlAuthErrorCopy";
 
 const authErrorSearchSchema = z.object({
   error: z.string().optional(),
@@ -43,13 +44,9 @@ function AuthErrorPage() {
         }
       >
         {provider === "dgtl" ? (
-          <Link
-            to="/sign-in"
-            search={{ sso: "off" }}
-            className="btn btn-soft w-full"
-          >
-            Back to SEO sign-in
-          </Link>
+          <a href="https://auth.dgtl.lk/user" className="btn btn-soft w-full">
+            Return to Service Hub
+          </a>
         ) : (
           <Link to="/" className="btn btn-soft w-full">
             Back to OpenSEO
@@ -58,19 +55,4 @@ function AuthErrorPage() {
       </AuthPageCard>
     </AuthPageShell>
   );
-}
-
-function getDgtlAuthErrorCopy(error: string | undefined) {
-  if (error === "signup_disabled" || error === "account_not_linked") {
-    return {
-      title: "DGTL account not linked",
-      description:
-        "Sign in to your existing SEO account first, then link your DGTL account in Settings.",
-    };
-  }
-  return {
-    title: "DGTL sign-in didn't finish",
-    description:
-      "The authorization was canceled or expired. Try again, or use your existing SEO sign-in.",
-  };
 }
